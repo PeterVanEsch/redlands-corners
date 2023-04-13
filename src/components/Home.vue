@@ -3,49 +3,48 @@
     <center><img alt="My logo" src="../assets/logo.png" height="75" width="450"></center>
     <br>
     <center><img alt="My house" v-bind:src="require(`../assets/h${x}.jpg`)" height="300" width="500"></center>
-
+    <center>
     <div class="input-container">
     <label for="street1"> first street:</label>
-    
-    <input type="text" id="street1" v-model="userInput1" :disabled="street1Selected">
-    
-    <select v-model="selectedStreet1" @change="onStreet1Selected">
-      <option v-for="street in filteredStreets1" :disabled="street1Selected" @change="onStreet1Selected" :key="street">{{ street }} </option>
+    <input type="text" id="street1" v-model="userInput1" :disabled="guess1Selected" :style="{'background-color':bgcolor1}">
+    <select v-model="selectedStreet1" :style="{'background-color':bgcolor1}">
+      <option v-for="street in filteredStreets1" :disabled="guess1Selected" :key="street">{{ street }} </option>
     </select>
     </div>
     <div class="input-container">
 
     <label for="street2" >  second street:</label>
-    <input type="text" id="street2" v-model="userInput2" :disabled="street2Selected">
-    <select v-model="selectedStreet2"  @change="onStreet2Selected">
-      <option v-for="street in filteredStreets2" :disabled="street2Selected" @change="onStreet2Selected" :key="street">{{ street }}</option>
+    <input type="text" id="street2" v-model="userInput2" :disabled="guess1Selected" :style="{'background-color':bgcolor2}">
+    <select v-model="selectedStreet2" :style="{'background-color':bgcolor2}">
+      <option v-for="street in filteredStreets2" :disabled="guess1Selected" :key="street">{{ street }}</option>
     </select>
+    <button @click="setFirstGuess(selectedStreet1, selectedStreet2)" >Finalize</button>
   </div>
+</center>
 <br>
 <br>
+<center>
   <div class="input2-container">
     <label for="street3"> first street:</label>
-    
-    <input type="text" id="street3" v-model="userInput3" :disabled="street3Selected">
-    
-    <select v-model="selectedStreet3" @change="onStreet3Selected">
-      <option v-for="street in filteredStreets3" :disabled="street3Selected" @change="onStreet3Selected" :key="street">{{ street }} </option>
+    <input type="text" id="street3" v-model="userInput3" :disabled="!guess1Selected || guess2Selected" class="input-background-color1">
+    <select v-model="selectedStreet3" class="input-background-color1">
+      <option v-for="street in filteredStreets3" :disabled="!guess1Selected || guess2Selected" :key="street">{{ street }} </option>
     </select>
     </div>
     <div class="input2-container">
 
     <label for="street4" >  second street:</label>
-    <input type="text" id="street4" v-model="userInput4" :disabled="street4Selected">
-    <select v-model="selectedStreet4"  @change="onStreet4Selected">
-      <option v-for="street in filteredStreets4" :disabled="street4Selected" @change="onStreet4Selected" :key="street">{{ street }}</option>
+    <input type="text" id="street4" v-model="userInput4" :disabled="!guess1Selected || guess2Selected" class="input-background-color2">
+    <select v-model="selectedStreet4" class="input-background-color2">
+      <option v-for="street in filteredStreets4" :disabled="!guess1Selected || guess2Selected" :key="street">{{ street }}</option>
     </select>
+    <button @click="setSecondGuess(selectedStreet3, selectedStreet4)" >Finalize</button>
   </div>
+</center>
 
-    <h2><center>{{ selectedStreet1 }}</center></h2>
-    <h2><center>{{ selectedStreet2 }}</center></h2>
-    <h2>{{ checkName(selectedStreet1,allCorners[x]) }} </h2>
-    <h2>{{ checkName(selectedStreet2,allCorners[x]) }} </h2>
+    
     <h2>{{ finalCheck(selectedStreet1, selectedStreet2, allCorners[x]) }}</h2>
+    <h2>{{ finalCheck(selectedStreet3, selectedStreet4, allCorners[x]) }}</h2>
     
   </div>
 </template>
@@ -66,15 +65,16 @@ export default class Home extends Vue {
   public selectedStreet1 = '';
   public userInput2 = '';
   public selectedStreet2 = '';
-  public street1Selected = false;
-  public street2Selected = false;
+  public guess1Selected = false;
   //second guess
   public userInput3 = '';
   public selectedStreet3 = '';
   public userInput4 = '';
   public selectedStreet4 = '';
-  public street3Selected = false;
-  public street4Selected = false;
+  public guess2Selected = false;
+  
+  public bgcolor1 = "white";
+  public bgcolor2 = "white";
 
   //filtered streets for all guesses------------------------------------------------------------------------------------------
   //first guess
@@ -107,37 +107,51 @@ export default class Home extends Vue {
     return day % 4;
   }
 
-  x = this.getDayOfYear(this.getDate());
+  x = 1;//this.getDayOfYear(this.getDate());
   guess = 0;
 
   //selectring steets to diable after click---------------------------------------------------------------------------------------
   //first guess
-  onStreet1Selected() {
-    this.street1Selected = true;
+  // onStreet1Selected() {
+  //   this.street1Selected = true;
     
-  }
-  onStreet2Selected(){
-    this.street2Selected = true;
-    this.guess += 1;
-  }
+  // }
+  // onStreet2Selected(){
+  //   this.street2Selected = true;
+  //   this.guess += 1;
+  // }
   //second guess
-  onStreet3Selected() {
-    this.street3Selected = true;
+  // onStreet3Selected() {
+  //   this.street3Selected = true;
     
-  }
-  onStreet4Selected(){
-    this.street4Selected = true;
-    this.guess += 1;
-  }
+  // }
+  // onStreet4Selected(){
+  //   this.street4Selected = true;
+  //   this.guess += 1;
+  // }
  
-  checkName(k: any, j: any){
+  checkStreet1(k: any, j: any): boolean{
     if (j.includes(k)){
-      return "correct";
+      this.bgcolor1 = "#80ff80";
+      return true;
     }
     else{
-      return "incorrect"
+      this.bgcolor1 = "#ff8080";
+      return false;
     }
   }
+
+  checkStreet2(k: any, j: any): boolean{
+    if (j.includes(k)){
+      this.bgcolor2 = "#80ff80";
+      return true;
+    }
+    else{
+      this.bgcolor2 = "#ff8080";
+      return false;
+    }
+  }
+
   finalCheck(a: any, b: any ,c: any){
     if (a == "" || b==""){
       return "";
@@ -154,19 +168,63 @@ export default class Home extends Vue {
       }
       
     }
-
-
   }
-  
+
+  mounted() {
+    if (localStorage.street1) {
+      this.selectedStreet1 = localStorage.street1;
+    }
+    if (localStorage.street2) {
+      this.selectedStreet2 = localStorage.street2;
+    }
+    if (localStorage.street3) {
+      this.selectedStreet3 = localStorage.street3;
+    }
+    if (localStorage.street4) {
+      this.selectedStreet4 = localStorage.street4;
+    }
+
+    if (localStorage.guess1Selected) {
+      this.guess1Selected = localStorage.guess1Selected;
+    }
+    if (localStorage.guess2Selected) {
+      this.guess2Selected = localStorage.guess2Selected;
+    }
+    if (localStorage.guess1street1 === "true") {
+      this.bgcolor1 = "#80ff80";
+    } else if (localStorage.guess1street1 === "false") {
+      this.bgcolor1 = "#ff8080";
+    } else {
+      this.bgcolor1 = "white";
+    }
+    if (localStorage.guess1street2 === "true") {
+      this.bgcolor2 = "#80ff80";
+    } else if (localStorage.guess1street2 === "false") {
+      this.bgcolor2 = "#ff8080";
+    } else {
+      this.bgcolor2 = "white";
+    }
+    console.log(this.bgcolor1)
+    console.log(this.bgcolor2)
+  }
+
+  setFirstGuess(street1: string, street2: string) {
+    localStorage.guess1street1 = this.checkStreet1(street1, this.allCorners[this.x])
+    localStorage.guess1street2 = this.checkStreet2(street2, this.allCorners[this.x])
+    localStorage.street1 = street1;
+    localStorage.street2 = street2;
+    this.guess1Selected = true;
+    localStorage.guess1Selected = this.guess1Selected;
+  }
+
+  setSecondGuess(street3: string, street4: string) {
+    localStorage.street3 = street3;
+    localStorage.street4 = street4;
+    this.guess2Selected = true;
+    localStorage.guess2Selected = this.guess2Selected;
+  }
 
   //public score = /*this.allCorners[this.x].includes(this.selectedStreet1)*/ this.checkName(this.selectedStreet1, this.allCorners[this.x],);
-
-  getDayOfYear(date: Date) {
-    let start = new Date(date.getFullYear(), 0, 0);
-    let diff = date.getTime() - start.getTime() + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
-    let day = Math.floor(diff / 86400000);
-    return day;
-  }
 }
 </script>
 
@@ -179,11 +237,14 @@ export default class Home extends Vue {
   
 }
 
- .incorrect-input {
-  background-color: #ff8080;
+.input-background-color1 {
+  background-color: var(--input-background-color1);
 }
 
-.correct-input {
-  background-color: #80ff80;
+.input-background-color2 {
+  background-color: var(--input-background-color2);
 }
+
 </style>
+<!-- #80ff80 -->
+<!-- #ff8080 -->
