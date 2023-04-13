@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    
+    <home>
+      
+    </home>
   </div>
 </template>
 
@@ -17,4 +19,5 @@ export default class App extends Vue {}
 </script>
 
 <style>
+
 </style>
