@@ -161,6 +161,12 @@ export default class Home extends Vue {
 
   //public score = /*this.allCorners[this.x].includes(this.selectedStreet1)*/ this.checkName(this.selectedStreet1, this.allCorners[this.x],);
 
+  getDayOfYear(date: Date) {
+    let start = new Date(date.getFullYear(), 0, 0);
+    let diff = date.getTime() - start.getTime() + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
+    let day = Math.floor(diff / 86400000);
+    return day;
+  }
 }
 </script>
 
