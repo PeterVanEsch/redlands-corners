@@ -9,18 +9,17 @@
     </center>
     <center>
       <div class="input-container">
-        <label for="street1"> first street:</label>
-        <input type="text" id="street1" v-model="userInput1" :disabled="guess1Selected" :style="{'background-color':bgcolor1}">
-        <select v-model="selectedStreet1" :style="{'background-color':bgcolor1}">
-          <option v-for="street in filteredStreets1" :disabled="guess1Selected" :key="street">{{ street }} </option>
-        </select>
+        <input type="search" placeholder="First street" list="data" v-model="selectedStreet1" :disabled="guess1Selected" :style="{'background-color':bgcolor1}"/>
+        <datalist id="data">
+          <option v-for="item in allStreets" :key="item" :value="item"></option>
+        </datalist>
       </div>
+      <label> and </label>
       <div class="input-container">
-        <label for="street2" >  second street:</label>
-        <input type="text" id="street2" v-model="userInput2" :disabled="guess1Selected" :style="{'background-color':bgcolor2}">
-        <select v-model="selectedStreet2" :style="{'background-color':bgcolor2}">
-          <option v-for="street in filteredStreets2" :disabled="guess1Selected" :key="street">{{ street }}</option>
-        </select>
+        <input type="search" placeholder="Second street" list="data" v-model="selectedStreet2" :disabled="guess1Selected" :style="{'background-color':bgcolor2}"/>
+        <datalist id="data">
+          <option v-for="item in allStreets" :key="item" :value="item"></option>
+        </datalist>
         <button @click="setFirstGuess(selectedStreet1, selectedStreet2)" >Finalize</button>
       </div>
     </center>
@@ -60,9 +59,7 @@ export default class Home extends Vue {
 
   // orgininally setting players 5 guessses----------------------------------------------------------------------------------
   //first guess 
-  public userInput1 = '';
   public selectedStreet1 = '';
-  public userInput2 = '';
   public selectedStreet2 = '';
   public guess1Selected = false;
   //second guess
@@ -77,13 +74,13 @@ export default class Home extends Vue {
 
   //filtered streets for all guesses------------------------------------------------------------------------------------------
   //first guess
-  public get filteredStreets1(): string[] {
-    return this.allStreets.filter(street => street.toLowerCase().includes(this.userInput1.toLowerCase()));
-  }
+  // public get filteredStreets1(): string[] {
+  //   return this.allStreets.filter(street => street.toLowerCase().includes(this.userInput1.toLowerCase()));
+  // }
   
-  public get filteredStreets2(): string[] {
-    return this.allStreets.filter(street => street.toLowerCase().includes(this.userInput2.toLowerCase()));
-  }
+  // public get filteredStreets2(): string[] {
+  //   return this.allStreets.filter(street => street.toLowerCase().includes(this.userInput2.toLowerCase()));
+  // }
 
   //second guess
   public get filteredStreets3(): string[] {
