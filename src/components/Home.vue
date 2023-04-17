@@ -1,51 +1,50 @@
 <template>
   <div class="home">
-    <center><img alt="My logo" src="../assets/logo.png" height="75" width="450"></center>
-    <br>
-    <center><img alt="My house" v-bind:src="require(`../assets/h${x}.jpg`)" height="300" width="500"></center>
     <center>
-    <div class="input-container">
-    <label for="street1"> first street:</label>
-    <input type="text" id="street1" v-model="userInput1" :disabled="guess1Selected" :style="{'background-color':bgcolor1}">
-    <select v-model="selectedStreet1" :style="{'background-color':bgcolor1}">
-      <option v-for="street in filteredStreets1" :disabled="guess1Selected" :key="street">{{ street }} </option>
-    </select>
-    </div>
-    <div class="input-container">
-
-    <label for="street2" >  second street:</label>
-    <input type="text" id="street2" v-model="userInput2" :disabled="guess1Selected" :style="{'background-color':bgcolor2}">
-    <select v-model="selectedStreet2" :style="{'background-color':bgcolor2}">
-      <option v-for="street in filteredStreets2" :disabled="guess1Selected" :key="street">{{ street }}</option>
-    </select>
-    <button @click="setFirstGuess(selectedStreet1, selectedStreet2)" >Finalize</button>
-  </div>
-</center>
-<br>
-<br>
-<center>
-  <div class="input2-container">
-    <label for="street3"> first street:</label>
-    <input type="text" id="street3" v-model="userInput3" :disabled="!guess1Selected || guess2Selected" class="input-background-color1">
-    <select v-model="selectedStreet3" class="input-background-color1">
-      <option v-for="street in filteredStreets3" :disabled="!guess1Selected || guess2Selected" :key="street">{{ street }} </option>
-    </select>
-    </div>
-    <div class="input2-container">
-
-    <label for="street4" >  second street:</label>
-    <input type="text" id="street4" v-model="userInput4" :disabled="!guess1Selected || guess2Selected" class="input-background-color2">
-    <select v-model="selectedStreet4" class="input-background-color2">
-      <option v-for="street in filteredStreets4" :disabled="!guess1Selected || guess2Selected" :key="street">{{ street }}</option>
-    </select>
-    <button @click="setSecondGuess(selectedStreet3, selectedStreet4)" >Finalize</button>
-  </div>
-</center>
-
-    
+      <img alt="My logo" src="../assets/logo.png" height="75" width="450">
+    </center>
+    <br>
+    <center>
+      <img alt="My house" v-bind:src="require(`../assets/h${x}.jpg`)" height="300" width="500">
+    </center>
+    <center>
+      <div class="input-container">
+        <label for="street1"> first street:</label>
+        <input type="text" id="street1" v-model="userInput1" :disabled="guess1Selected" :style="{'background-color':bgcolor1}">
+        <select v-model="selectedStreet1" :style="{'background-color':bgcolor1}">
+          <option v-for="street in filteredStreets1" :disabled="guess1Selected" :key="street">{{ street }} </option>
+        </select>
+      </div>
+      <div class="input-container">
+        <label for="street2" >  second street:</label>
+        <input type="text" id="street2" v-model="userInput2" :disabled="guess1Selected" :style="{'background-color':bgcolor2}">
+        <select v-model="selectedStreet2" :style="{'background-color':bgcolor2}">
+          <option v-for="street in filteredStreets2" :disabled="guess1Selected" :key="street">{{ street }}</option>
+        </select>
+        <button @click="setFirstGuess(selectedStreet1, selectedStreet2)" >Finalize</button>
+      </div>
+    </center>
+    <br>
+    <br>
+    <center>
+      <div class="input2-container">
+        <label for="street3"> first street:</label>
+        <input type="text" id="street3" v-model="userInput3" :disabled="!guess1Selected || guess2Selected" class="input-background-color1">
+        <select v-model="selectedStreet3" class="input-background-color1">
+          <option v-for="street in filteredStreets3" :disabled="!guess1Selected || guess2Selected" :key="street">{{ street }} </option>
+        </select>
+      </div>
+      <div class="input2-container">
+        <label for="street4" >  second street:</label>
+        <input type="text" id="street4" v-model="userInput4" :disabled="!guess1Selected || guess2Selected" class="input-background-color2">
+        <select v-model="selectedStreet4" class="input-background-color2">
+          <option v-for="street in filteredStreets4" :disabled="!guess1Selected || guess2Selected" :key="street">{{ street }}</option>
+        </select>
+        <button @click="setSecondGuess(selectedStreet3, selectedStreet4)" >Finalize</button>
+      </div>
+    </center>
     <h2>{{ finalCheck(selectedStreet1, selectedStreet2, allCorners[x]) }}</h2>
     <h2>{{ finalCheck(selectedStreet3, selectedStreet4, allCorners[x]) }}</h2>
-    
   </div>
 </template>
 
@@ -190,6 +189,7 @@ export default class Home extends Vue {
     if (localStorage.guess2Selected) {
       this.guess2Selected = localStorage.guess2Selected;
     }
+    
     if (localStorage.guess1street1 === "true") {
       this.bgcolor1 = "#80ff80";
     } else if (localStorage.guess1street1 === "false") {
