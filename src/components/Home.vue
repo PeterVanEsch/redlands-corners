@@ -7,16 +7,16 @@
     <center>
       <img alt="My house" v-bind:src="require(`../assets/h${x}.jpg`)" height="300" width="500" style="border: 6px solid #000000; padding: 10px; margin: 5px;">
     </center>
-    <center>
+    <center :class="{shake: disabled1 || disabled2}">
       <div class="input-container">
-        <input class="tt" type="search" placeholder="First street" list="data" v-model="selectedStreet1" :disabled="guess1Selected" :style="{'background-color':bgcolor1}"/>
+        <input class="tt" :class="{redoutline: disabled1}" type="search" @change="disabled1=false" placeholder="First street" list="data" v-model="selectedStreet1" :disabled="guess1Selected" :style="{backgroundColor: bgcolor1}"/>
         <datalist id="data">
           <option v-for="item in allStreets" :key="item" :value="item"></option>
         </datalist>
       </div>
-      <label style="font-size: 30px; fi"> +  </label>
+      <label style="font-size: 30px;"> + </label>
       <div class="input-container">
-        <input  class="tt" type="search" placeholder="Second street" list="data" v-model="selectedStreet2" :disabled="guess1Selected" :style="{'background-color':bgcolor2}"/>
+        <input  class="tt" :class="{redoutline: disabled2}" type="search" @change="disabled2=false" placeholder="Second street" list="data" v-model="selectedStreet2" :disabled="guess1Selected" :style="{'background-color':bgcolor2}"/>
         <datalist id="data">
           <option v-for="item in allStreets" :key="item" :value="item"></option>
         </datalist>
@@ -89,6 +89,9 @@ export default class Home extends Vue {
   public guess3Selected = false;
   public bgcolor5 = "white";
   public bgcolor6 = "white";
+
+  public disabled1 = false;
+  public disabled2 = false;
   
   //date functions-------------------------------------------------------------------------------------------------------------------
   getDate() {
@@ -290,6 +293,19 @@ checkStreet5(k: any, j: any): boolean{
     localStorage.street2 = street2;
     this.guess1Selected = true;
     localStorage.guess1Selected = this.guess1Selected;
+    this.disabled1 = false;
+    this.disabled2 = false;
+    } else {
+      if (street1 == "" || !this.allStreets.includes(street1)) {
+        this.disabled1 = true;
+      }
+      if (street2 == "" || !this.allStreets.includes(street2)) {
+        this.disabled2 = true;
+      }
+      if (street1 == street2) {
+        this.disabled1 = true;
+        this.disabled2 = true;
+      }
     }
   }
   //second attemp
@@ -403,29 +419,22 @@ setThirdGuess(street5: string, street6: string) {
 }
 
 .shake {
-      animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-      transform: translate3d(0, 0, 0);
-      backface-visibility: hidden;
-      perspective: 1000px;
-    }
-    @keyframes shake {
-      10%, 90% {
-        transform: translate3d(-10px, 0, 0);
-      }
-      
-      20%, 80% {
-        transform: translate3d(10px, 0, 0);
-      }
-    
-      30%, 50%, 70% {
-        transform: translate3d(-10px, 0, 0);
-      }
-    
-      40%, 60% {
-        transform: translate3d(10px, 0, 0);
-      }
-    }
+  animation: shake 0.3s ease-in-out 0s 2;
+  /* animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px; */
+}
+@keyframes shake {
+  0% { margin-left: 0rem; }
+  25% { margin-left: 0.5rem; }
+  75% { margin-left: -0.5rem; }
+  100% { margin-left: 0rem; }
+}
 
+.redoutline {
+  box-shadow: 0 0 0.5em red;
+}
 
 </style>
 <!-- #80ff80 -->
