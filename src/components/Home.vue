@@ -57,10 +57,10 @@
         <button class="buttonG1" @click="setThirdGuess(selectedStreet5, selectedStreet6)" >Guess</button>
       </div>
       <h1>{{ guessCount }}</h1>
-      <h1>{{ minute }}</h1>
     </center>
-    <div class="winz" v-if="gameWon">
-      <center><h1>Congrats</h1></center>
+    <div class="winz" v-if="gameWon && yesDisplay">
+      <button class="close" @click="yesDisplay=false">X</button>
+      <center><h1>{{ congratsMSG[guessCount][congratsIndex] }}</h1></center>
       <center><div class="rating">
   <span class="star" v-if="5 - guessCount + 1 >= 1"  ></span>
   <span class="star"  v-if="5 - guessCount + 1 >= 2"></span>
@@ -73,8 +73,9 @@
   <center><h1 v-if="guessCount!=1" class="winMsg">You got it in {{ guessCount }} guesses</h1></center>
     </div>
 
-  <div class="loss" v-if="!gameWon && guessCount == 3">
-    <center><h1> Sorry you lost</h1></center>
+  <div class="loss" v-if="!gameWon && guessCount == 3 && yesDisplay">
+    <button class="close" @click="yesDisplay=false">X</button>
+    <center><h1> {{ lozeMSg[congratsIndex] }}</h1></center>
     <center><h1 class="winMsg"> The correct answer was {{ allCorners[x][0] }} and  {{ allCorners[x][1] }}</h1></center>
   </div>
   </div>
@@ -90,6 +91,10 @@ export default class Home extends Vue {
   public allHouse = [1,2,3,4,5,6];
 
   public gameWon = false;
+  public yesDisplay = true;
+  public congratsMSG = [[], ["Amazing", "Brilliant", "Perfect", "Astounding", "Ingenius"], ["Congrats", "Great Playing", "Superb", "To Easy"], ["Not Bad", "Good Game", "Not to shabby", "Well Done"]];
+  public lozeMSg = ["Sorry You Lost", "OH NO!", "Game Over", "Better Luck Tomorrow"];
+  public congratsIndex = Math.floor(Math.random() * 4);
   // orgininally setting players 5 guessses----------------------------------------------------------------------------------
   //first guess 
   public selectedStreet1 = '';
@@ -135,13 +140,7 @@ export default class Home extends Vue {
     return day + 2;
   }
 
-  getMinOfDay(){
-    let d = new Date();
-    let minute = d.getMinutes() + (d.getHours() * 60);
-    return minute;
-  }
-
-  public minute = this.getMinOfDay();
+  
   
 
 
@@ -244,8 +243,11 @@ checkStreet5(k: any, j: any): boolean{
   mounted() {
     if (!this.checkDay()){
         localStorage.guessCount = 0;
+        localStorage.guess1Selected = false;
+        localStorage.guess2Selected = false;
+        localStorage.guess3Selected = false;
         //localStorage.gameWon = false;
-        this.gameWon = false;
+        localStorage.gameWon = false;
         localStorage.Day = this.getDayOfYear(this.getDate());
         localStorage.guess1street1 = "nil";
         localStorage.guess1street2 = "nil";
@@ -263,21 +265,6 @@ checkStreet5(k: any, j: any): boolean{
         localStorage.street5 = '';
         localStorage.street6 = '';
         
-        
-        
-
-        //clearing guesses
-        /*
-        localStorage.street1 = '';
-        localStorage.street2 = '';
-        localStorage.guess1Selected = false;
-        localStorage.street3 = '';
-        localStorage.street4 = '';
-        localStorage.guess2Selected = false;
-        localStorage.street5 = '';
-        localStorage.street6 = '';
-        localStorage.guess3Selected = false;
-        */
     }
 
     //saving dat
@@ -297,13 +284,14 @@ checkStreet5(k: any, j: any): boolean{
     if (localStorage.guessCount == 4) {   
         this.guessCount = 4;   
     }
+    if (localStorage.gameWon != null && localStorage.gameWon != "true"){
+      this.gameWon = false;
+    }
+    else if (localStorage.gameWon != null && localStorage.gameWon === "true"){
+      this.gameWon = true;
+    }
 
-    if (localStorage.gameWon){
-      if(!this.checkDay()){
-      localStorage.gameWon = false;
-    }
-      this.gameWon = localStorage.gameWon;
-    }
+    
 
    
     //for guess 1
@@ -314,9 +302,14 @@ checkStreet5(k: any, j: any): boolean{
       this.selectedStreet2 = localStorage.street2;
     }
 
-    if (localStorage.guess1Selected) {
-      this.guess1Selected = localStorage.guess1Selected;
+    if (localStorage.guess1Selected === "true") {
+      this.guess1Selected = true;
     }
+    else{
+      this.guess1Selected = false;
+    }
+
+    
 
     //for guess 2
     if (localStorage.street3) {
@@ -326,8 +319,11 @@ checkStreet5(k: any, j: any): boolean{
       this.selectedStreet4 = localStorage.street4;
     }
    
-    if (localStorage.guess2Selected) {
-      this.guess2Selected = localStorage.guess2Selected;
+    if (localStorage.guess2Selected === "true") {
+      this.guess2Selected = true;
+    }
+    else{
+      this.guess2Selected = false;
     }
 
     //for guess 3
@@ -338,8 +334,11 @@ checkStreet5(k: any, j: any): boolean{
       this.selectedStreet6 = localStorage.street6;
     }
    
-    if (localStorage.guess3Selected) {
-      this.guess3Selected = localStorage.guess3Selected;
+    if (localStorage.guess3Selected === "true") {
+      this.guess3Selected = true;
+    }
+    else{
+      this.guess3Selected = false;
     }
 
     //saving colors--------------------------------------------------------------------------------------------
@@ -413,7 +412,11 @@ checkStreet5(k: any, j: any): boolean{
     }
     localStorage.street1 = street1;
     localStorage.street2 = street2;
+
     this.guess1Selected = true;
+    if(!this.checkDay()){
+      this.guess1Selected = false;
+    }
     localStorage.guess1Selected = this.guess1Selected;
     
     this.disabled1 = false;
@@ -575,13 +578,13 @@ setThirdGuess(street5: string, street6: string) {
   font-family: nunito,roboto,proxima-nova,"blippo", fantasy;
   background-color: rgb(241, 252, 241);
   color: #fa9a4c;
-  top: 10%;
-  left: 35%;
   border-radius: 20px;
   width: 500px;
   height: 500px;
   border: 0px solid #a09f9f;
   box-shadow: 0 0 0.9em rgb(161, 253, 143);
+  top: 10%;
+  
 }
 .loss{
   z-index: 4;
@@ -684,6 +687,15 @@ setThirdGuess(street5: string, street6: string) {
 @keyframes showStar {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+.close{
+  background-color: rgb(241, 252, 241);
+  float: right;
+  border: 0px;
+  font-size: 30px;
+  font-family: Consolas, monaco, monospace;
+  padding: 2%;
 }
 </style>
 <!-- #80ff80 -->
