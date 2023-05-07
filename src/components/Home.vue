@@ -57,6 +57,8 @@
         <button class="buttonG1" @click="setThirdGuess(selectedStreet5, selectedStreet6)" >Guess</button>
       </div>
       <h1>{{ guessCount }}</h1>
+      <h1> {{ totalDays }}</h1>
+      <h1>{{ totalGuesses }}</h1>
     </center>
     <div class="winz" v-if="gameWon && yesDisplay">
       <button class="close" @click="yesDisplay=false">X</button>
@@ -71,6 +73,9 @@
 </div></center>
 <center><h1 v-if="guessCount==1" class="winMsg" >  You got it in 1 guess</h1></center>
   <center><h1 v-if="guessCount!=1" class="winMsg">You got it in {{ guessCount }} guesses</h1></center>
+  <br>
+  <br>
+  <center><h1 class="avgMsg">Average score: {{ (((5*totalDays) - totalGuesses + (1*totalDays))/totalDays) }} <img alt="stars" src="../assets/star.jpg" height="20" width="20" ></h1></center>
     </div>
 
   <div class="loss" v-if="!gameWon && guessCount == 3 && yesDisplay">
@@ -95,6 +100,11 @@ export default class Home extends Vue {
   public congratsMSG = [[], ["Amazing", "Brilliant", "Perfect", "Astounding", "Ingenius"], ["Congrats", "Great Playing", "Superb", "To Easy"], ["Not Bad", "Good Game", "Not to shabby", "Well Done"]];
   public lozeMSg = ["Sorry You Lost", "OH NO!", "Game Over", "Better Luck Tomorrow"];
   public congratsIndex = Math.floor(Math.random() * 4);
+
+  //all the stars 
+  public totalDays = 1;
+  public totalGuesses = 0;
+  public numTotalDays = 1;
   // orgininally setting players 5 guessses----------------------------------------------------------------------------------
   //first guess 
   public selectedStreet1 = '';
@@ -140,15 +150,12 @@ export default class Home extends Vue {
     return day + 2;
   }
 
-  
-  
-
-
   public x =  /*this.getDayOfYear(this.getDate());*/ 5;
 
   
 
   checkDay(){
+    localStorage.totalDays = this.totalDays;
     return localStorage.Day == this.getDayOfYear(this.getDate());
   }
 
@@ -242,6 +249,10 @@ checkStreet5(k: any, j: any): boolean{
   //cookie functions------------------------------------------------------------------------------------------------------------
   mounted() {
     if (!this.checkDay()){
+        this.numTotalDays = parseInt(localStorage.totalDays);
+        this.numTotalDays += 1;
+        localStorage.totalDays = this.numTotalDays;
+        this.totalDays = localStorage.totalDays;
         localStorage.guessCount = 0;
         localStorage.guess1Selected = false;
         localStorage.guess2Selected = false;
@@ -266,7 +277,10 @@ checkStreet5(k: any, j: any): boolean{
         localStorage.street6 = '';
         
     }
-
+    //save total guesses
+    if (localStorage.totalGuesses){
+      this.totalGuesses = parseInt(localStorage.totalGuesses);
+    }
     //saving dat
      //if (localStorage.Day){
        //this.x = localStorage.Day;
@@ -396,11 +410,13 @@ checkStreet5(k: any, j: any): boolean{
   // setting guesses----------------------------------------------------------------------------------------------------------------
   //first attempt
   setFirstGuess(street1: string, street2: string) {
+    
     if (street1 != street2 && street1 != "" && street2 != "" && this.allStreets.includes(street1) && this.allStreets.includes(street2)){
     localStorage.guess1street1 = this.checkStreet1(street1, this.allCorners[this.x])
     localStorage.guess1street2 = this.checkStreet2(street2, this.allCorners[this.x])
     if (!this.guess1Selected){
       this.guessCount += 1;
+      this.totalGuesses += 1;
     }
     if (localStorage.guess1street1 === "true" && localStorage.guess1street2 === "true"){
       localStorage.gameWon = true;
@@ -414,9 +430,9 @@ checkStreet5(k: any, j: any): boolean{
     localStorage.street2 = street2;
 
     this.guess1Selected = true;
-    if(!this.checkDay()){
-      this.guess1Selected = false;
-    }
+    //if(!this.checkDay()){
+      //this.guess1Selected = false;
+    //}
     localStorage.guess1Selected = this.guess1Selected;
     
     this.disabled1 = false;
@@ -435,6 +451,7 @@ checkStreet5(k: any, j: any): boolean{
     }
     
     localStorage.guessCount = this.guessCount;
+    localStorage.totalGuesses = this.totalGuesses;
   }
   //second attemp
   setSecondGuess(street3: string, street4: string) {
@@ -444,6 +461,7 @@ checkStreet5(k: any, j: any): boolean{
     localStorage.guess2street2 = this.checkStreet4(street4, this.allCorners[this.x])
     if (!this.guess2Selected){
       this.guessCount += 1;
+      this.totalGuesses += 1;
     }
     if (localStorage.guess2street1 === "true" && localStorage.guess2street2 === "true"){
       localStorage.gameWon = true;
@@ -471,6 +489,7 @@ checkStreet5(k: any, j: any): boolean{
     }
     
     localStorage.guessCount = this.guessCount;
+    localStorage.totalGuesses = this.totalGuesses;
   }
 //second attemp
 setThirdGuess(street5: string, street6: string) {
@@ -480,6 +499,7 @@ setThirdGuess(street5: string, street6: string) {
    localStorage.guess3street2 = this.checkStreet6(street6, this.allCorners[this.x])
    if (!this.guess3Selected){
       this.guessCount += 1;
+      this.totalGuesses += 1;
     }
    if (localStorage.guess3street1 === "true" && localStorage.guess3street2 === "true"){
       localStorage.gameWon = true;
@@ -509,6 +529,7 @@ setThirdGuess(street5: string, street6: string) {
 
    
   localStorage.guessCount = this.guessCount;
+  localStorage.totalGuesses = this.totalGuesses;
  }
 
   //public score = /*this.allCorners[this.x].includes(this.selectedStreet1)*/ this.checkName(this.selectedStreet1, this.allCorners[this.x],);
@@ -696,6 +717,12 @@ setThirdGuess(street5: string, street6: string) {
   font-size: 30px;
   font-family: Consolas, monaco, monospace;
   padding: 2%;
+}
+
+.avgMsg{
+  font-family: Consolas, monaco, monospace;
+  font-size: 55%;
+  color: rgb(85, 85, 85);
 }
 </style>
 <!-- #80ff80 -->
