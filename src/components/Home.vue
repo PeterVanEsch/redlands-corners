@@ -56,6 +56,23 @@
         </datalist>
         <button class="buttonG1" @click="setThirdGuess(selectedStreet5, selectedStreet6)" >Guess</button>
       </div>
+    </center>
+      <br>
+    <center :class="{shake: disabled7 || disabled8}">
+      <div class="input-container">
+        <input  class="tt" :class="{redoutline: disabled7}" type="search"  @change="disabled7=false" placeholder="First street" list="data" v-model="selectedStreet7" :disabled="guess4Selected || !guess3Selected" :style="{'background-color':bgcolor7}"/>
+        <datalist id="data">
+          <option v-for="item in allStreets" :key="item" :value="item"></option>
+        </datalist>
+      </div>
+      <label> and </label>
+      <div class="input-container">
+        <input class="tt" :class="{redoutline: disabled8}" type="search"   @change="disabled8=false" placeholder="Second street" list="data" v-model="selectedStreet8" :disabled="guess4Selected || !guess3Selected" :style="{'background-color':bgcolor8}"/>
+        <datalist  id="data">
+          <option v-for="item in allStreets" :key="item" :value="item"></option>
+        </datalist>
+        <button class="buttonG1" @click="setForthGuess(selectedStreet7, selectedStreet8)" >Guess</button>
+      </div>
       <h1>{{ guessCount }}</h1>
       <h1> {{ totalDays }}</h1>
       <h1>{{ totalGuesses }}</h1>
@@ -78,7 +95,7 @@
   <center><h1 class="avgMsg">Average score: {{ (((5*totalDays) - totalGuesses + (1*totalDays))/totalDays) }} <img alt="stars" src="../assets/star.jpg" height="20" width="20" ></h1></center>
     </div>
 
-  <div class="loss" v-if="!gameWon && guessCount == 3 && yesDisplay">
+  <div class="loss" v-if="!gameWon && guessCount == 4 && yesDisplay">
     <button class="close" @click="yesDisplay=false">X</button>
     <center><h1> {{ lozeMSg[congratsIndex] }}</h1></center>
     <center><h1 class="winMsg"> The correct answer was {{ allCorners[x][0] }} and  {{ allCorners[x][1] }}</h1></center>
@@ -130,6 +147,14 @@ export default class Home extends Vue {
   public bgcolor6 = "white";
   public disabled5 = false;
   public disabled6 = false;
+  //forth guess
+  public selectedStreet7 = '';
+  public selectedStreet8 = '';
+  public guess4Selected = false;
+  public bgcolor7 = "white";
+  public bgcolor8 = "white";
+  public disabled7 = false;
+  public disabled8 = false;
 
   public guessCount = 0;
 
@@ -183,7 +208,7 @@ export default class Home extends Vue {
   }
 //for guess 2 ------------------------------------------------------------------------------------------------------------
 
-checkStreet3(k: any, j: any): boolean{
+  checkStreet3(k: any, j: any): boolean{
     if (j.includes(k)){
       this.bgcolor3 = "#80ff80";
       return true;
@@ -228,6 +253,32 @@ checkStreet5(k: any, j: any): boolean{
       return false;
     }
   } 
+
+
+   //for guess 3 ------------------------------------------------------------------------------------------------------------
+
+  checkStreet7(k: any, j: any): boolean{
+    if (j.includes(k)){
+      this.bgcolor7 = "#80ff80";
+      return true;
+    }
+    else{
+      this.bgcolor7 = "#ff8080";
+      return false;
+    }
+  }
+
+  checkStreet8(k: any, j: any): boolean{
+    if (j.includes(k)){
+      this.bgcolor8 = "#80ff80";
+      return true;
+    }
+    else{
+      this.bgcolor8 = "#ff8080";
+      return false;
+    }
+  } 
+  
 //final checking function (not used rn)-------------------------------------------------------------------------------------
   finalCheck(a: any, b: any ,c: any){
     if (a == "" || b==""){
@@ -257,9 +308,11 @@ checkStreet5(k: any, j: any): boolean{
         localStorage.guess1Selected = false;
         localStorage.guess2Selected = false;
         localStorage.guess3Selected = false;
+        localStorage.guess4Selected = false;
         //localStorage.gameWon = false;
         localStorage.gameWon = false;
         localStorage.Day = this.getDayOfYear(this.getDate());
+
         localStorage.guess1street1 = "nil";
         localStorage.guess1street2 = "nil";
         localStorage.street1 = '';
@@ -275,6 +328,12 @@ checkStreet5(k: any, j: any): boolean{
         localStorage.guess3street2 = "nil";
         localStorage.street5 = '';
         localStorage.street6 = '';
+
+        localStorage.guess4street1 = "nil";
+        localStorage.guess4street2 = "nil";
+        localStorage.street7 = '';
+        localStorage.street8 = '';
+
         
     }
     //save total guesses
@@ -355,6 +414,23 @@ checkStreet5(k: any, j: any): boolean{
       this.guess3Selected = false;
     }
 
+    //for guess 4
+    if (localStorage.street7) {
+      this.selectedStreet7 = localStorage.street7;
+    }
+    if (localStorage.street8) {
+      this.selectedStreet8 = localStorage.street8;
+    }
+   
+    if (localStorage.guess4Selected === "true") {
+      this.guess4Selected = true;
+    }
+    else{
+      this.guess4Selected = false;
+    }
+
+
+
     //saving colors--------------------------------------------------------------------------------------------
     //guess 1
     if (localStorage.guess1street1 === "true") {
@@ -404,6 +480,22 @@ checkStreet5(k: any, j: any): boolean{
       this.bgcolor6 = "white";
     }
 
+    //guess 4
+    if (localStorage.guess4street1 === "true") {
+      this.bgcolor7 = "#80ff80";
+    } else if (localStorage.guess4street1 === "false") {
+      this.bgcolor7 = "#ff8080";
+    } else {
+      this.bgcolor7 = "white";
+    }
+    if (localStorage.guess4street2 === "true") {
+      this.bgcolor8 = "#80ff80";
+    } else if (localStorage.guess4street2 === "false") {
+      this.bgcolor8 = "#ff8080";
+    } else {
+      this.bgcolor8 = "white";
+    }
+
   }
 
 
@@ -425,6 +517,8 @@ checkStreet5(k: any, j: any): boolean{
       localStorage.guess2Selected = this.guess2Selected;
       this.guess3Selected = true;
       localStorage.guess3Selected = this.guess3Selected;
+      this.guess4Selected = true;
+      localStorage.guess4Selected = this.guess4Selected;
     }
     localStorage.street1 = street1;
     localStorage.street2 = street2;
@@ -468,6 +562,8 @@ checkStreet5(k: any, j: any): boolean{
       this.gameWon = localStorage.gameWon;
       this.guess3Selected = true;
       localStorage.guess3Selected = this.guess3Selected;
+      this.guess4Selected = true;
+      localStorage.guess4Selected = this.guess4Selected;
     }
     localStorage.street3 = street3;
     localStorage.street4 = street4;
@@ -491,7 +587,7 @@ checkStreet5(k: any, j: any): boolean{
     localStorage.guessCount = this.guessCount;
     localStorage.totalGuesses = this.totalGuesses;
   }
-//second attemp
+//third attempt
 setThirdGuess(street5: string, street6: string) {
    
    if (street5 != street6 && street5 != "" && street6 != "" && this.allStreets.includes(street5) && this.allStreets.includes(street6)){
@@ -504,6 +600,8 @@ setThirdGuess(street5: string, street6: string) {
    if (localStorage.guess3street1 === "true" && localStorage.guess3street2 === "true"){
       localStorage.gameWon = true;
       this.gameWon = localStorage.gameWon;
+      this.guess4Selected = true;
+      localStorage.guess4Selected = this.guess4Selected;
     }
    localStorage.street5 = street5;
    localStorage.street6 = street6;
@@ -525,9 +623,45 @@ setThirdGuess(street5: string, street6: string) {
       }
     }
 
+  localStorage.guessCount = this.guessCount;
+  localStorage.totalGuesses = this.totalGuesses;
+ }
 
-
+ setForthGuess(street7: string, street8: string) {
    
+   if (street7 != street8 && street7 != "" && street8 != "" && this.allStreets.includes(street7) && this.allStreets.includes(street8)){
+   localStorage.guess4street1 = this.checkStreet7(street7, this.allCorners[this.x])
+   localStorage.guess4street2 = this.checkStreet8(street8, this.allCorners[this.x])
+   if (!this.guess4Selected){
+      this.guessCount += 1;
+      this.totalGuesses += 1;
+    }
+   if (localStorage.guess4street1 === "true" && localStorage.guess4street2 === "true"){
+      console.log("only here");
+      localStorage.gameWon = true;
+      this.gameWon = localStorage.gameWon;
+      
+    }
+   localStorage.street7 = street7;
+   localStorage.street8 = street8;
+   this.guess4Selected = true;
+   localStorage.guess4Selected = this.guess4Selected;
+   this.disabled7 = false;
+   this.disabled8 = false;
+   }
+   else {
+      if (street7 == "" || !this.allStreets.includes(street7)) {
+        this.disabled7 = true;
+      }
+      if (street8 == "" || !this.allStreets.includes(street8)) {
+        this.disabled8 = true;
+      }
+      if (street7 == street8) {
+        this.disabled7 = true;
+        this.disabled8 = true;
+      }
+    }
+
   localStorage.guessCount = this.guessCount;
   localStorage.totalGuesses = this.totalGuesses;
  }
