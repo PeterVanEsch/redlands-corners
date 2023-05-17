@@ -1,20 +1,21 @@
 <template>
   <div class="home">
     <center>
-      <img alt="My logo" src="../assets/logo.png" height="75" width="480" >
+      <img alt="My logo" src="../assets/better.png" height="210" width="406" >
     </center>
     <br>
     <center>
       <img alt="My house" v-bind:src="require(`../assets/h${x}.jpg`)" height="300" width="500" style="border: 6px solid #000000; padding: 10px; margin: 5px;">
     </center>
     <center :class="{shake: disabled1 || disabled2}">
+      <div class="guess1">
       <div class="input-container">
         <input class="tt" :class="{redoutline: disabled1}" type="search" @change="disabled1=false" placeholder="First street" list="data" v-model="selectedStreet1" :disabled="guess1Selected" :style="{backgroundColor: bgcolor1}"/>
         <datalist id="data">
           <option v-for="item in allStreets" :key="item" :value="item"></option>
         </datalist>
       </div>
-      <label style="font-size: 30px; font-family:Georgia, serif"> + </label>
+      <label style="font-size: 30px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"> + </label>
       <div class="input-container">
         <input  class="tt" :class="{redoutline: disabled2}" type="search" @change="disabled2=false" placeholder="Second street" list="data" v-model="selectedStreet2" :disabled="guess1Selected" :style="{'background-color':bgcolor2}"/>
         <datalist id="data">
@@ -22,6 +23,7 @@
         </datalist>
         <button class="buttonG1" @click="setFirstGuess(selectedStreet1, selectedStreet2)" >Guess</button>
       </div>
+    </div>
     </center>
     <br>
     <center :class="{shake: disabled3 || disabled4}">
@@ -31,7 +33,7 @@
           <option v-for="item in allStreets" :key="item" :value="item"></option>
         </datalist>
       </div>
-      <img alt="and" src="../assets/potenialPLus.png" height="30" width="30" >
+      <label style="font-size: 30px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"> + </label>
       <div class="input-container">
         <input class="tt" :class="{redoutline: disabled4}" type="search"  @change="disabled4=false" placeholder="Second street" list="data" v-model="selectedStreet4" :disabled="guess2Selected || !guess1Selected" :style="{'background-color':bgcolor4}"/>
         <datalist  id="data">
@@ -48,7 +50,7 @@
           <option v-for="item in allStreets" :key="item" :value="item"></option>
         </datalist>
       </div>
-      <label> and </label>
+      <label style="font-size: 30px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"> + </label>
       <div class="input-container">
         <input class="tt" :class="{redoutline: disabled6}" type="search"   @change="disabled6=false" placeholder="Second street" list="data" v-model="selectedStreet6" :disabled="guess3Selected || !guess2Selected" :style="{'background-color':bgcolor6}"/>
         <datalist  id="data">
@@ -65,7 +67,7 @@
           <option v-for="item in allStreets" :key="item" :value="item"></option>
         </datalist>
       </div>
-      <label> and </label>
+      <label style="font-size: 30px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"> + </label>
       <div class="input-container">
         <input class="tt" :class="{redoutline: disabled8}" type="search"   @change="disabled8=false" placeholder="Second street" list="data" v-model="selectedStreet8" :disabled="guess4Selected || !guess3Selected" :style="{'background-color':bgcolor8}"/>
         <datalist  id="data">
@@ -73,11 +75,25 @@
         </datalist>
         <button class="buttonG1" @click="setForthGuess(selectedStreet7, selectedStreet8)" >Guess</button>
       </div>
-      <h1>{{ guessCount }}</h1>
-      <h1> {{ totalStars }}</h1>
-      <!--<h1>{{ totalGuesses }}</h1>-->
-      <h1>{{ totalDays }}</h1>
-    </center>
+      </center>
+      <br>
+    <center :class="{shake: disabled9 || disabled10}">
+      <div class="input-container">
+        <input  class="tt" :class="{redoutline: disabled9}" type="search"  @change="disabled9=false" placeholder="First street" list="data" v-model="selectedStreet9" :disabled="guess5Selected || !guess4Selected" :style="{'background-color':bgcolor9}"/>
+        <datalist id="data">
+          <option v-for="item in allStreets" :key="item" :value="item"></option>
+        </datalist>
+      </div>
+      <label style="font-size: 30px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"> + </label>
+      <div class="input-container">
+        <input class="tt" :class="{redoutline: disabled10}" type="search"   @change="disabled10=false" placeholder="Second street" list="data" v-model="selectedStreet10" :disabled="guess5Selected || !guess4Selected" :style="{'background-color':bgcolor10}"/>
+        <datalist  id="data">
+          <option v-for="item in allStreets" :key="item" :value="item"></option>
+        </datalist>
+        <button class="buttonG1" @click="setFifthGuess(selectedStreet9, selectedStreet10)" >Guess</button>
+      </div>
+      </center>
+
     <div class="winz" v-if="gameWon && yesDisplay">
       <button class="close" @click="yesDisplay=false">X</button>
       <center><h1>{{ congratsMSG[guessCount-1][congratsIndex] }}</h1></center>
@@ -96,10 +112,13 @@
   <center><h1 class="avgMsg">Average score: {{ Math.round(totalStars/totalDays*100)/100 }} <img alt="stars" src="../assets/star.jpg" height="20" width="20" ></h1></center>
     </div>
 
-  <div class="loss" v-if="!gameWon && guessCount == 4 && yesDisplay">
+  <div class="loss" v-if="!gameWon && guessCount == 5 && yesDisplay">
     <button class="close" @click="yesDisplay=false">X</button>
     <center><h1> {{ lozeMSg[congratsIndex] }}</h1></center>
     <center><h1 class="winMsg"> The correct answer was {{ allCorners[x][0] }} and  {{ allCorners[x][1] }}</h1></center>
+    <br>
+    <br>
+    <center><h1 class="avgMsg">Average score: {{ Math.round(totalStars/totalDays*100)/100 }} <img alt="stars" src="../assets/star.jpg" height="20" width="20" ></h1></center>
   </div>
   </div>
 </template>
@@ -114,6 +133,7 @@ import { Options, Vue } from 'vue-class-component';
     guess2Selected(toSet) {localStorage.guess2Selected = toSet;},
     guess3Selected(toSet) {localStorage.guess3Selected = toSet;},
     guess4Selected(toSet) {localStorage.guess4Selected = toSet;},
+    guess5Selected(toSet) {localStorage.guess5Selected = toSet;},
     guessCount(toSet) {localStorage.guessCount = toSet;},
     // totalGuesses(toSet) {localStorage.totalGuesses = toSet;},
     totalStars(toSet) {localStorage.totalStars = toSet;},
@@ -121,6 +141,9 @@ import { Options, Vue } from 'vue-class-component';
   }
 })
 export default class Home extends Vue {
+
+  public w = window.innerWidth;
+  public h = window.innerHeight;
   // Lists used for all program-----------------------------------------------------------------------------------------------
   public allStreets = ['1st', 'Gavin', 'Maple', 'Olive', 'Pine', 'Redlands', 'San Mateo', "wrong", "answer", "still", "incorrect", "what", "the", "ryan", "is", "so", "dumb", "Palm", "S Buena Vista St", "W Clark st", "S Michigan st"];
   public allCorners = [["madeup",  "test"] , ["wrong", "answer"], ["still", "incorrect"], ["cant", "remember"], ["more", "needed"], ["Palm", "S Buena Vista St"] , ["W Clark st", "S Michigan st"] ];
@@ -128,7 +151,7 @@ export default class Home extends Vue {
 
   public gameWon = false;
   public yesDisplay = true;
-  public congratsMSG = [["Amazing", "Brilliant", "Perfect", "Astounding", "Ingenius"], ["Congrats", "Great Playing", "Superb", "Too Easy"], ["Not Bad", "Good Game", "Not to shabby", "Well Done"], ["Acceptable", "Not the worst", "Could be better", "Mediocre"]];
+  public congratsMSG = [["Amazing", "Brilliant", "Perfect", "Astounding", "Ingenius"], ["Congrats", "Great Playing", "Superb", "Too Easy"], ["Not Bad", "Good Game", "Not to shabby", "Well Done"], ["Acceptable", "Not the worst", "Could be better", "Mediocre"], ["Phew", "Just Barely", "Alright", "Last Try"]];
   public lozeMSg = ["Sorry You Lost", "OH NO!", "Game Over", "Better Luck Tomorrow"];
   public congratsIndex = Math.floor(Math.random() * 4);
 
@@ -169,6 +192,15 @@ export default class Home extends Vue {
   public bgcolor8 = "white";
   public disabled7 = false;
   public disabled8 = false;
+
+  //fifth guess
+  public selectedStreet9 = '';
+  public selectedStreet10 = '';
+  public guess5Selected = false;
+  public bgcolor9 = "white";
+  public bgcolor10 = "white";
+  public disabled9 = false;
+  public disabled10 = false;
 
   public guessCount = 0;
   
@@ -260,7 +292,7 @@ checkStreet5(k: any, j: any): boolean{
   } 
 
 
-   //for guess 3 ------------------------------------------------------------------------------------------------------------
+   //for guess 4 ------------------------------------------------------------------------------------------------------------
 
   checkStreet7(k: any, j: any): boolean{
     if (j.includes(k)){
@@ -280,6 +312,30 @@ checkStreet5(k: any, j: any): boolean{
     }
     else{
       this.bgcolor8 = "#ff8080";
+      return false;
+    }
+  } 
+
+  //for guess 5 ------------------------------------------------------------------------------------------------------------
+
+  checkStreet9(k: any, j: any): boolean{
+    if (j.includes(k)){
+      this.bgcolor9 = "#80ff80";
+      return true;
+    }
+    else{
+      this.bgcolor9 = "#ff8080";
+      return false;
+    }
+  }
+
+  checkStreet10(k: any, j: any): boolean{
+    if (j.includes(k)){
+      this.bgcolor10 = "#80ff80";
+      return true;
+    }
+    else{
+      this.bgcolor10 = "#ff8080";
       return false;
     }
   } 
@@ -310,6 +366,7 @@ checkStreet5(k: any, j: any): boolean{
         localStorage.guess2Selected = false;
         localStorage.guess3Selected = false;
         localStorage.guess4Selected = false;
+        localStorage.guess5Selected = false;
         localStorage.gameWon = false;
         localStorage.Day = this.getDayOfYear(this.getDate());
 
@@ -333,6 +390,11 @@ checkStreet5(k: any, j: any): boolean{
         localStorage.guess4street2 = null;
         localStorage.street7 = '';
         localStorage.street8 = '';
+
+        localStorage.guess5street1 = null;
+        localStorage.guess5street2 = null;
+        localStorage.street9 = '';
+        localStorage.street10 = '';
     }
 
     if (localStorage.totalStars) {
@@ -400,6 +462,18 @@ checkStreet5(k: any, j: any): boolean{
       this.guess4Selected = localStorage.guess4Selected === "true";
     }
 
+    //for guess 5
+    if (localStorage.street9) {
+      this.selectedStreet9 = localStorage.street9;
+    }
+    if (localStorage.street10) {
+      this.selectedStreet10 = localStorage.street10;
+    }
+   
+    if (localStorage.guess5Selected != null) {
+      this.guess5Selected = localStorage.guess5Selected === "true";
+    }
+
     //saving colors--------------------------------------------------------------------------------------------
     //guess 1
     if (localStorage.guess1street1 === "true") {
@@ -465,6 +539,22 @@ checkStreet5(k: any, j: any): boolean{
       this.bgcolor8 = "white";
     }
 
+    // guess 5
+    if (localStorage.guess5street1 === "true") {
+      this.bgcolor9 = "#80ff80";
+    } else if (localStorage.guess5street1 === "false") {
+      this.bgcolor9 = "#ff8080";
+    } else {
+      this.bgcolor9 = "white";
+    }
+    if (localStorage.guess5street2 === "true") {
+      this.bgcolor10 = "#80ff80";
+    } else if (localStorage.guess5street2 === "false") {
+      this.bgcolor10 = "#ff8080";
+    } else {
+      this.bgcolor10 = "white";
+    }
+
   }
 
 
@@ -486,6 +576,7 @@ checkStreet5(k: any, j: any): boolean{
         this.guess2Selected = true;
         this.guess3Selected = true;
         this.guess4Selected = true;
+        this.guess5Selected = true;
         if (!this.guess1Selected){
           this.totalStars += 5;
         }
@@ -525,6 +616,7 @@ checkStreet5(k: any, j: any): boolean{
       this.gameWon = true;
       this.guess3Selected = true;
       this.guess4Selected = true;
+      this.guess5Selected = true;
       if (!this.guess2Selected){
         this.totalStars += 4;
       }
@@ -562,6 +654,7 @@ setThirdGuess(street5: string, street6: string) {
    if (s1 && s2){
       this.gameWon = true;
       this.guess4Selected = true;
+      this.guess5Selected = true;
       if (!this.guess3Selected){
         this.totalStars += 3;
       }
@@ -599,6 +692,7 @@ setThirdGuess(street5: string, street6: string) {
     }
    if (s1 && s2){
       this.gameWon = true;
+      this.guess5Selected = true;
       if (!this.guess4Selected){
         this.totalStars += 2;
       }
@@ -622,6 +716,44 @@ setThirdGuess(street5: string, street6: string) {
       }
     }
  }
+
+
+ setFifthGuess(street9: string, street10: string) {
+   
+  if (street9 != street10 && street9 != "" && street10 != "" && this.allStreets.includes(street9) && this.allStreets.includes(street10)){
+  let s1 = this.checkStreet9(street9, this.allCorners[this.x]);
+  let s2 = this.checkStreet10(street10, this.allCorners[this.x]);
+  localStorage.guess5street1 = s1;
+  localStorage.guess5street2 = s2;
+   if (!this.guess5Selected){
+      this.guessCount += 1;
+      // this.totalGuesses += 1;
+    }
+   if (s1 && s2){
+      this.gameWon = true;
+      if (!this.guess5Selected){
+        this.totalStars += 1;
+      }
+    }
+   localStorage.street9 = street9;
+   localStorage.street10 = street10;
+   this.guess5Selected = true;
+   this.disabled9 = false;
+   this.disabled10 = false;
+   }
+   else {
+      if (street9 == "" || !this.allStreets.includes(street9)) {
+        this.disabled9 = true;
+      }
+      if (street10 == "" || !this.allStreets.includes(street10)) {
+        this.disabled10 = true;
+      }
+      if (street9 == street10) {
+        this.disabled9 = true;
+        this.disabled10 = true;
+      }
+    }
+ }
   
   //public score = /*this.allCorners[this.x].includes(this.selectedStreet1)*/ this.checkName(this.selectedStreet1, this.allCorners[this.x],);
 }
@@ -630,19 +762,9 @@ setThirdGuess(street5: string, street6: string) {
 <style scoped>
 .input-container{
   display: inline-block; 
-}
-.input2-container{
-  display: inline-block;  
   
 }
 
-.input-background-color1 {
-  background-color: var(--input-background-color1);
-}
-
-.input-background-color2 {
-  background-color: var(--input-background-color2);
-}
 
 
 
@@ -686,6 +808,11 @@ setThirdGuess(street5: string, street6: string) {
 .winz{
   z-index: 4;
   position: absolute;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -10%);
+  
+
   font-size: 30px;
   font-family: nunito,roboto,proxima-nova,"blippo", fantasy;
   background-color: rgb(241, 252, 241);
@@ -695,18 +822,21 @@ setThirdGuess(street5: string, street6: string) {
   height: 500px;
   border: 0px solid #a09f9f;
   box-shadow: 0 0 0.9em rgb(161, 253, 143);
-  top: 10%;
+
+  top: 30%;
   
 }
 .loss{
   z-index: 4;
   position: absolute;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -10%);
   font-size: 30px;
   font-family: nunito,roboto,proxima-nova,"blippo", fantasy;
   background-color: rgb(241, 252, 241);
   color: #fa9a4c;
-  top: 10%;
-  left: 35%;
+  top: 30%;
   border-radius: 20px;
   width: 500px;
   height: 500px;
@@ -718,7 +848,7 @@ setThirdGuess(street5: string, street6: string) {
   border: 1px solid #ffffff;
   border-radius: 6px;
   box-shadow: rgba(109, 95, 86, 0.274) 1px 2px 4px;
-  box-sizing: border-box;
+  
   cursor: pointer;
   display: inline-block;
   font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
@@ -735,6 +865,9 @@ setThirdGuess(street5: string, street6: string) {
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: middle;
+  width: 15dvw;
+  height: 2vw;
+  
 }
 
 .shake {
@@ -814,6 +947,13 @@ setThirdGuess(street5: string, street6: string) {
   font-family: Consolas, monaco, monospace;
   font-size: 55%;
   color: rgb(85, 85, 85);
+}
+.and{
+  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif ;
+  font-weight: bold;
+  color: white;
+  background-color: #2185f8;
+  border-radius: 15%;
 }
 </style>
 <!-- #80ff80 -->
