@@ -1,11 +1,11 @@
 <template>
   <div class="home">
     <center>
-      <img alt="My logo" src="../assets/better.png" height="210" width="406" >
+      <img class="logoImg" alt="My logo" src="../assets/better.png">
     </center>
     <br>
     <center>
-      <img alt="My house" v-bind:src="require(`../assets/h${x}.jpg`)" height="300" width="500" style="border: 6px solid #000000; padding: 10px; margin: 5px;">
+      <img class="houseImg" alt="My house" v-bind:src="require(`../assets/h${x}.jpg`)" style="border: 6px solid #000000; padding: 10px; margin: 5px;">
     </center>
     <center :class="{shake: disabled1 || disabled2}">
       <div class="guess1">
@@ -866,7 +866,8 @@ setThirdGuess(street5: string, street6: string) {
   -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: middle;
-  width: 15dvw;
+  width: 15lvw;
+  min-width: 160px;
   
   
 }
@@ -949,12 +950,18 @@ setThirdGuess(street5: string, street6: string) {
   font-size: 55%;
   color: rgb(85, 85, 85);
 }
-.and{
-  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif ;
-  font-weight: bold;
-  color: white;
-  background-color: #2185f8;
-  border-radius: 15%;
+.houseImg{
+  height: 22%;
+  width: 35%;
+  min-height: 130px;
+  min-width: 340px;
+}
+
+.logoImg{
+  height: 22%;
+  width: 26%;
+  min-height: 180px;
+  min-width: 260px;
 }
 </style>
 <!-- #80ff80 -->
