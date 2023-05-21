@@ -781,12 +781,14 @@ setThirdGuess(street5: string, street6: string) {
   cursor: pointer;
   display: inline-block;
   font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
-  font-size: 16px;
+  font-size: 80%;
   font-weight: 800;
   line-height: 16px;
+  width: 6vw;
+  min-width: 55px;
   min-height: 40px;
   outline: 0;
-  padding: 12px 14px;
+  padding: 1px 4px;
   text-align: center;
   text-rendering: geometricprecision;
   text-transform: none;
@@ -815,13 +817,15 @@ setThirdGuess(street5: string, street6: string) {
   transform: translate(-50%, -10%);
   
 
-  font-size: 30px;
+  font-size: 170%;
   font-family: nunito,roboto,proxima-nova,"blippo", fantasy;
   background-color: rgb(241, 252, 241);
   color: #fa9a4c;
   border-radius: 20px;
-  width: 500px;
-  height: 500px;
+  width: 30%;
+  height: 65%;
+  min-height: 450px;
+  min-width: 350px;
   border: 0px solid #a09f9f;
   box-shadow: 0 0 0.9em rgb(161, 253, 143);
 
@@ -834,7 +838,7 @@ setThirdGuess(street5: string, street6: string) {
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -10%);
-  font-size: 30px;
+  font-size: 170%;
   font-family: nunito,roboto,proxima-nova,"blippo", fantasy;
   background-color: rgb(241, 252, 241);
   color: #fa9a4c;
@@ -844,6 +848,11 @@ setThirdGuess(street5: string, street6: string) {
   height: 500px;
   border: 0px solid #a09f9f;
   box-shadow: 0 0 0.9em rgb(161, 253, 143);
+  width: 30%;
+  height: 65%;
+  min-height: 450px;
+  min-width: 350px;
+  padding: 8px;
 }
 .tt{
   
@@ -867,7 +876,7 @@ setThirdGuess(street5: string, street6: string) {
   touch-action: manipulation;
   vertical-align: middle;
   width: 15lvw;
-  min-width: 160px;
+  min-width: 140px;
   
   
 }
@@ -951,7 +960,7 @@ setThirdGuess(street5: string, street6: string) {
   color: rgb(85, 85, 85);
 }
 .houseImg{
-  height: 22%;
+  height: 35%;
   width: 35%;
   min-height: 130px;
   min-width: 340px;
